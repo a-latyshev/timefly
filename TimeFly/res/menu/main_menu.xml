@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/insert_task"
+        android:title="Insert task">
+    </item>
+    
+    <item
+        android:id="@+id/show_today"
+        android:title="Today">
+    </item>
+    
+    <item
+        android:id="@+id/show_calender"
+        android:title="Calender">
+    </item>
+    
+    <item
+        android:id="@+id/show_today_week"
+        android:title="Today week">
+    </item>
+
+</menu>

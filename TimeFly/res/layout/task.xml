@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <CheckBox
+        android:id="@+id/task_finished"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onFinishedTask" />
+
+    <TextView
+        android:id="@+id/this_task"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6px"
+        android:text="@+id/task_title"
+        android:textSize="40px" />
+
+</LinearLayout>
