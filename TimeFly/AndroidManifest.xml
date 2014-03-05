@@ -22,16 +22,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="timefly.activity.CalenderActivity"
-            android:label="@string/title_activity_calender" >
+            android:name="timefly.activity.EditActivity"
+            android:label="@string/title_activity_edit" >
         </activity>
         <activity
             android:name="timefly.activity.CalenderActivity"
             android:label="@string/title_activity_calender" >
-        </activity>
-        <activity
-            android:name="timefly.activity.CalederActivity"
-            android:label="@string/title_activity_caleder" >
         </activity>
     </application>
 

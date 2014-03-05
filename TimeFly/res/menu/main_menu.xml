@@ -2,22 +2,22 @@
 
     <item
         android:id="@+id/insert_task"
-        android:title="Insert task">
+        android:title="Добавить задачу">
     </item>
     
     <item
         android:id="@+id/show_today"
-        android:title="Today">
+        android:title="Сегодня">
     </item>
     
     <item
         android:id="@+id/show_calender"
-        android:title="Calender">
+        android:title="Календарь">
     </item>
     
     <item
         android:id="@+id/show_today_week"
-        android:title="Today week">
+        android:title="Сегодняшняя неделя">
     </item>
 
 </menu>

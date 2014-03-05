@@ -1,8 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="match_parent"
+    android:background="@color/listcolor"
     android:orientation="vertical" >
-    
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/edit_task_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Название задачи" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/edit_task_description"
+            android:layout_width="fill_parent"
+            android:layout_height="200dip"
+            android:ems="10"
+            android:gravity="top"
+            android:hint="Описание задачи" >
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="120dip"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6px"
+                android:text="Важно?"
+                android:textColor="@color/black"
+                android:textSize="40px" />
+
+            <CheckBox
+                android:id="@+id/edit_task_importent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onEditImportentTask" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6px"
+                android:text="Cрочно?"
+                android:textColor="@color/black"
+                android:textSize="40px" />
+
+            <CheckBox
+                android:id="@+id/edit_task_express"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onEditExpressTask" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6px"
+                android:text="Важно?"
+                android:textColor="@color/black"
+                android:textSize="40px" />
+
+            <CheckBox
+                android:id="@+id/edit_task_routine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onEditRoutineTask" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/edit_button_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Создать задачу" >
+    </Button>
 
 </LinearLayout>

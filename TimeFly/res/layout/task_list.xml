@@ -8,12 +8,12 @@
         android:id="@+android:id/today_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/today_date" />
+        android:text="FHHH" />
 
     <ListView
-        android:id="@android:id/list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:id="@+android:id/task_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
     </ListView>
 
 </LinearLayout>
