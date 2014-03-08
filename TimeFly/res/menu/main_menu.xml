@@ -10,6 +10,11 @@
         android:title="Сегодня">
     </item>
     
+        <item
+        android:id="@+id/show_inbox"
+        android:title="Входящие">
+    </item>
+    
     <item
         android:id="@+id/show_calender"
         android:title="Календарь">

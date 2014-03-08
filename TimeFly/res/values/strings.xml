@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">SQLExample</string>
+    <string name="app_name">TimeFly</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_todo_overview">TodoOverview</string>
@@ -14,8 +14,14 @@
     <string name="todo_edit_description">Description</string>
     <string name="todo_edit_confirm">Confirm</string>
 
-    <color name="listcolor">#FFE87C</color>
+    <color name="listcolor">#99ccff</color>
     <color name="black">#000000</color>
+    <color name="white">#fff</color>
+    <color name="this_task_color">#fff</color>
+    <color name="blue">#79a7f2</color>
+    <color name="grayblue">#91a3c2</color>
+    <color name="yellow">#FFD700</color>
+    <color name="darkblue">#000080</color>
 
     <string name="title_activity_todo_details">TodoDetails</string>
     <string name="title_activity_edit">EditActivity</string>

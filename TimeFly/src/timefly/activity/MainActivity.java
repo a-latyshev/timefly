@@ -1,6 +1,9 @@
 package timefly.activity;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import timefly.adapters.DateHelper;
 import timefly.adapters.MySimpleAdapter;
 import timefly.database.DB;
 
@@ -9,12 +12,14 @@ import com.example.timefly.R;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.text.Spanned;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
@@ -22,13 +27,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements
 		LoaderCallbacks<Cursor> {
@@ -39,7 +47,9 @@ public class MainActivity extends FragmentActivity implements
 	private static final int ACTIVITY_CREATE = 0;
 	private static final int ACTIVITY_EDIT = 1;
 	private static final int ACTIVITY_CALENDER = 2;
-	private static final int DELETE_ID = Menu.FIRST + 1;
+	private static final int ACTIVITY_EDIT_CREATED_TASK = 3;
+	private static final int CONTEXT_DELETE_TASK = 1;
+	private static final int CONTEXT_EDIT_TASK = 2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +62,7 @@ public class MainActivity extends FragmentActivity implements
 		getSupportLoaderManager().initLoader(0, null, this);
 
 		tasksList.setOnItemClickListener(new OnItemClickListener() {
+
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -66,19 +77,38 @@ public class MainActivity extends FragmentActivity implements
 				 * .findViewById(R.id.this_task_description)).getText()
 				 * .toString();
 				 */
+			/*	TextView ttt = (TextView) view.findViewById(R.id.this_task_title);
+				//Spanned spanText = android.text.Html.fromHtml(tt.getText().toString()); 
+				//tt.setText(spanText);
+				ttt.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);*/
+				TextView desc = (TextView) view
+						.findViewById(R.id.this_task_description);
+				if (desc.getTag().toString().equals("2")) {
+					desc.setTag("0");
+					desc.setVisibility(desc.VISIBLE);
+				}else{
+					desc.setTag("2");
+					desc.setVisibility(desc.GONE);
+				}
+				// ti.setText(desc.getVisibility()+"");
+				// desc.setAnimation();
+
+				
 
 				final long thisId = id;
 				TextView tt = (TextView) findViewById(R.id.today_title);
 				// tt.setText(express + "");
 				ch.setOnClickListener(new OnClickListener() {
-					
+
 					@Override
 					public void onClick(View v) {
 						if (ch.isChecked()) {
-							db.updateTask(thisId, null, null, 1, -2, -2, -2);
+							db.updateTask(thisId, null, null, 1, -2, -2, -2,
+									null);
 						} else {
-							db.updateTask(thisId, null, null, 0, -2, -2, -2);
-						//	fillData();
+							db.updateTask(thisId, null, null, 0, -2, -2, -2,
+									null);
+							// fillData();
 							// bt.setText("true");
 						}
 
@@ -86,7 +116,22 @@ public class MainActivity extends FragmentActivity implements
 				});
 
 			}
+
 		});
+
+		/*
+		 * tasksList.setOnItemLongClickListener(new OnItemLongClickListener() {
+		 * Intent i = new Intent(null, null);
+		 * 
+		 * @Override public boolean onItemLongClick(AdapterView<?> parent, View
+		 * view, int position, long id) {
+		 * 
+		 * 
+		 * startActivityForResult(i, ACTIVITY_CREATE);
+		 * getSupportLoaderManager().getLoader(0).forceLoad();
+		 * 
+		 * return false; } });
+		 */
 
 	}
 
@@ -103,10 +148,10 @@ public class MainActivity extends FragmentActivity implements
 		tasksList.setAdapter(scAdapter);
 
 		// добавляем контекстное меню к списку
-		//registerForContextMenu(tasksList);
+		registerForContextMenu(tasksList);
 
 		// создаем лоадер для чтения данных
-		
+
 	}
 
 	@Override
@@ -140,14 +185,23 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	private void todayDate() {
-
 		Calendar c = Calendar.getInstance();
-		int yearr = c.get(c.YEAR);
-		int monthh = c.get(c.MONTH) + 1;
-		int dayy = c.get(c.DAY_OF_MONTH);
-
+		DateHelper dh = new DateHelper();
+		// Date time = (Date) c.getTime();
+		int yearr = c.get(Calendar.YEAR);
+		int monthh = c.get(Calendar.MONTH) + 1;
+		int dayy = c.get(Calendar.DAY_OF_MONTH);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM");
+		// db.addTask("1", "", 0, 1, 1, 1, 1394109081264L);
 		TextView today_title = (TextView) findViewById(R.id.today_title);
-		today_title.setText(dayy + "." + monthh + "." + yearr);
+		today_title.setText(dayy + " " + dh.getMonth(Calendar.MONTH) + " " + yearr + ", " + dh.getWeek(Calendar.DAY_OF_WEEK));
+		// today_title.setText(c.getTime() + "");
+
+		// Date time = new Date();
+		// Calendar c2 = Calendar.getInstance();
+		// c2.setTimeInMillis(1394109081264L);
+		// int yr = c2.get(Calendar.YEAR);
+		//today_title.setText(dayy + "." + monthh + "." + yearr + "**" + mo);
 	}
 
 	private void initCalender() {
@@ -168,7 +222,6 @@ public class MainActivity extends FragmentActivity implements
 			today_title.setText(thisDay + "." + thisMonth + "." + thisYear);
 		}
 		fillData();
-
 	}
 
 	@Override
@@ -176,6 +229,35 @@ public class MainActivity extends FragmentActivity implements
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main_menu, menu);
 		return true;
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		menu.add(0, CONTEXT_EDIT_TASK, 0, "Изменить");
+		menu.add(0, CONTEXT_DELETE_TASK, 0, "Удалить");
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case CONTEXT_EDIT_TASK:
+			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+					.getMenuInfo();
+			Intent intent = new Intent(this, EditActivity.class);
+			intent.putExtra(DB.COLUMN_ID, info.id);
+			startActivityForResult(intent, ACTIVITY_EDIT_CREATED_TASK);
+			return true;
+
+		case CONTEXT_DELETE_TASK:
+			AdapterContextMenuInfo info1 = (AdapterContextMenuInfo) item
+					.getMenuInfo();
+			db.deleteTask(info1.id);
+			fillData();
+			return true;
+		}
+		return super.onContextItemSelected(item);
 	}
 
 	protected void onDestroy() {

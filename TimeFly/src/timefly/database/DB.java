@@ -18,6 +18,7 @@ public class DB {
 	public static final String COLUMN_IMPORTANT = "important";
 	public static final String COLUMN_EXPRESS = "express";
 	public static final String COLUMN_ROUTINE = "routine";
+	public static final String COLUMN_DUEDATE= "duedate";
 
 	private static final String DATABASE_NAME = "TimeFly.db";
 	private static final int DATABASE_VERSION = 1;
@@ -25,7 +26,9 @@ public class DB {
 			+ " (" + COLUMN_ID + " integer primary key autoincrement, "
 			+ COLUMN_TITLE + " text, " + COLUMN_FINISHED + " integer, "
 			+ COLUMN_IMPORTANT + " integer, " + COLUMN_EXPRESS + " integer, "
-			+ COLUMN_ROUTINE + " integer, " + COLUMN_DESCRIPTION + " text "
+			+ COLUMN_ROUTINE + " integer, " 
+			+ COLUMN_DUEDATE + " text, " 
+			+ COLUMN_DESCRIPTION + " text "
 			+ ");";
 
 	private final Context mCtx;
@@ -53,7 +56,7 @@ public class DB {
 
 	public Cursor getThisTask(long rowId) throws SQLException {
 		String[] columns = new String[] { COLUMN_DESCRIPTION, COLUMN_FINISHED,
-				COLUMN_TITLE, COLUMN_EXPRESS, COLUMN_IMPORTANT, COLUMN_ROUTINE };
+				COLUMN_TITLE, COLUMN_EXPRESS, COLUMN_IMPORTANT, COLUMN_ROUTINE, COLUMN_DUEDATE };
 		Cursor mCursor = db.query(true, TABLE_NAME, columns, COLUMN_ID + "="
 				+ rowId, null, null, null, null, null);
 		if (mCursor != null) {
@@ -64,7 +67,7 @@ public class DB {
 
 	// добавить запись в DB_TABLE
 	public long addTask(String title, String decription, long finished,
-			long important, long express, long routine) {
+			long important, long express, long routine, String duedate) {
 		ContentValues cv = new ContentValues();
 		cv.put(COLUMN_TITLE, title);
 		cv.put(COLUMN_DESCRIPTION, decription);
@@ -72,11 +75,12 @@ public class DB {
 		cv.put(COLUMN_IMPORTANT, important);
 		cv.put(COLUMN_EXPRESS, express);
 		cv.put(COLUMN_ROUTINE, routine);
+		cv.put(COLUMN_DUEDATE, duedate);
 		return db.insert(TABLE_NAME, null, cv);
 	}
 
 	public boolean updateTask(long rowId, String title, String description,
-			long finished, long important, long express, long routine) {
+			long finished, long important, long express, long routine, String duedate) {
 		ContentValues cv = new ContentValues();
 		if (title != null) {
 			cv.put(COLUMN_TITLE, title);
@@ -95,6 +99,9 @@ public class DB {
 		}
 		if (routine != -2) {
 			cv.put(COLUMN_ROUTINE, routine);
+		}
+		if (duedate != null) {
+			cv.put(COLUMN_DUEDATE, duedate);
 		}
 		return db.update(TABLE_NAME, cv, COLUMN_ID + "=" + rowId, null) > 0;
 	}

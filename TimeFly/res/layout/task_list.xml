@@ -2,18 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/listcolor"
     android:orientation="vertical" >
 
     <TextView
         android:id="@+android:id/today_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="FHHH" />
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:text="today date"
+        android:background="@color/white" 
+        android:gravity="center"
+        android:textSize="18sp"/>
 
     <ListView
         android:id="@+android:id/task_list"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:dividerHeight="8sp"
+        android:divider = "@color/listcolor">"
     </ListView>
 
 </LinearLayout>
