@@ -27,7 +27,7 @@ public class DB {
 			+ COLUMN_TITLE + " text, " + COLUMN_FINISHED + " integer, "
 			+ COLUMN_IMPORTANT + " integer, " + COLUMN_EXPRESS + " integer, "
 			+ COLUMN_ROUTINE + " integer, " 
-			+ COLUMN_DUEDATE + " text, " 
+			+ COLUMN_DUEDATE + " long, " 
 			+ COLUMN_DESCRIPTION + " text "
 			+ ");";
 
@@ -64,10 +64,15 @@ public class DB {
 		}
 		return mCursor;
 	}
+	
+	public Cursor getTasksBetweenDate(){
+		return null;
+		
+	}
 
 	// добавить запись в DB_TABLE
 	public long addTask(String title, String decription, long finished,
-			long important, long express, long routine, String duedate) {
+			long important, long express, long routine, long duedate) {
 		ContentValues cv = new ContentValues();
 		cv.put(COLUMN_TITLE, title);
 		cv.put(COLUMN_DESCRIPTION, decription);
@@ -80,7 +85,7 @@ public class DB {
 	}
 
 	public boolean updateTask(long rowId, String title, String description,
-			long finished, long important, long express, long routine, String duedate) {
+			long finished, long important, long express, long routine, long duedate) {
 		ContentValues cv = new ContentValues();
 		if (title != null) {
 			cv.put(COLUMN_TITLE, title);
@@ -100,7 +105,7 @@ public class DB {
 		if (routine != -2) {
 			cv.put(COLUMN_ROUTINE, routine);
 		}
-		if (duedate != null) {
+		if (duedate != -2) {
 			cv.put(COLUMN_DUEDATE, duedate);
 		}
 		return db.update(TABLE_NAME, cv, COLUMN_ID + "=" + rowId, null) > 0;

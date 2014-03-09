@@ -2,6 +2,7 @@ package timefly.activity;
 
 import java.util.Calendar;
 
+import timefly.adapters.DateHelper;
 import timefly.database.DB;
 
 import com.example.timefly.R;
@@ -46,6 +47,8 @@ public class EditActivity extends FragmentActivity {
 
 	private long rowId = -1;
 
+	private DateHelper dh = new DateHelper();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,7 +70,6 @@ public class EditActivity extends FragmentActivity {
 		rowId = intent.getLongExtra(DB.COLUMN_ID, -1);
 		if (rowId != -1) {
 			populateFields();
-
 		}
 
 		Confirm.setOnClickListener(new View.OnClickListener() {
@@ -122,11 +124,14 @@ public class EditActivity extends FragmentActivity {
 	protected Dialog onCreateDialog(int id) {
 
 		Calendar c = Calendar.getInstance();
-		if (id == DIALOG_TIME) {
+		if ((id == DIALOG_TIME) && !(edDuedate1.equals(""))) {
 			TimePickerDialog tpd = new TimePickerDialog(this,
 					callTimeDatePicker, c.get(Calendar.HOUR_OF_DAY),
 					c.get(Calendar.MINUTE), true);
 			return tpd;
+		} else {
+			Toast.makeText(getApplicationContext(),
+					"Дата должна быть заполнена!", Toast.LENGTH_LONG);
 		}
 
 		if (id == DIALOG_DATE) {
@@ -140,17 +145,21 @@ public class EditActivity extends FragmentActivity {
 	}
 
 	OnDateSetListener callBackDatePicker = new OnDateSetListener() {
+
 		@Override
 		public void onDateSet(DatePicker view, int year, int month, int day) {
-			edDuedate.setText(day + "/" + month + "/" + year);
-			edDuedate1 = day + ":" + month + ":" + year;
+			month++;
+			edDuedate.setText(day + "-" + month + "-" + year);
+			edDuedate1 = day + "-" + month + "-" + year;
 		}
 	};
 
 	OnTimeSetListener callTimeDatePicker = new OnTimeSetListener() {
+
+		@Override
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-			edDuetime.setText(hourOfDay + ":" + minute);
-			edDuedate2 = ":" + hourOfDay + ":" + minute;
+			edDuetime.setText(hourOfDay + "-" + minute);
+			edDuedate2 = "-" + hourOfDay + "-" + minute;
 		}
 	};
 
@@ -185,7 +194,14 @@ public class EditActivity extends FragmentActivity {
 		if (edRoutine.isChecked()) {
 			routine = 1;
 		}
-		String duedate = edDuedate1 + edDuedate2;
+		long duedate = 0;
+		duedate = dh.getLongTime(edDuedate1, edDuedate2);
+		/*
+		 * if (!(edDuedate1.equals("")) && !(edDuedate2.equals(""))) { duedate =
+		 * dh.getLongTime(edDuedate1 + edDuedate2, 0); } else if
+		 * (!(edDuedate1.equals("")) && (edDuedate2.equals(""))) { duedate =
+		 * dh.getLongTime(edDuedate1, 1); }
+		 */
 		db.addTask(title, description, finished, important, express, routine,
 				duedate);
 	}
@@ -198,7 +214,7 @@ public class EditActivity extends FragmentActivity {
 		long important = task.getLong(task.getColumnIndex(DB.COLUMN_IMPORTANT));
 		long express = task.getLong(task.getColumnIndex(DB.COLUMN_EXPRESS));
 		long routine = task.getLong(task.getColumnIndex(DB.COLUMN_ROUTINE));
-		String duedate = task.getString(task.getColumnIndex(DB.COLUMN_DUEDATE));
+		long duedate = task.getLong(task.getColumnIndex(DB.COLUMN_DUEDATE));
 
 		edTitle.setText(title);
 		edDescription.setText(description);
@@ -211,8 +227,8 @@ public class EditActivity extends FragmentActivity {
 		if (routine == 1) {
 			edRoutine.setChecked(true);
 		}
-		edDuedate.setText(duedate);
-		edDuetime.setText(duedate);
+		edDuedate.setText(dh.getStringDate(duedate));
+		edDuetime.setText(dh.getStringTime(duedate));
 	}
 
 	private void updateTask() {
@@ -231,7 +247,8 @@ public class EditActivity extends FragmentActivity {
 		if (edRoutine.isChecked()) {
 			routine = 1;
 		}
-		String duedate = edDuedate1 + edDuedate2;
+		long duedate = 0;
+		duedate = dh.getLongTime(edDuedate1, edDuedate2);
 		db.updateTask(rowId, title, description, finished, important, express,
 				routine, duedate);
 	}

@@ -34,6 +34,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +44,7 @@ public class MainActivity extends FragmentActivity implements
 		LoaderCallbacks<Cursor> {
 
 	private ListView tasksList;
-	private DB db;
+	private static DB db;
 	private MySimpleAdapter scAdapter;
 	private static final int ACTIVITY_CREATE = 0;
 	private static final int ACTIVITY_EDIT = 1;
@@ -77,28 +79,24 @@ public class MainActivity extends FragmentActivity implements
 				 * .findViewById(R.id.this_task_description)).getText()
 				 * .toString();
 				 */
-			/*	TextView ttt = (TextView) view.findViewById(R.id.this_task_title);
-				//Spanned spanText = android.text.Html.fromHtml(tt.getText().toString()); 
-				//tt.setText(spanText);
-				ttt.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);*/
+				/*
+				 * TextView ttt = (TextView)
+				 * view.findViewById(R.id.this_task_title); //Spanned spanText =
+				 * android.text.Html.fromHtml(tt.getText().toString());
+				 * //tt.setText(spanText);
+				 * ttt.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+				 */
 				TextView desc = (TextView) view
 						.findViewById(R.id.this_task_description);
 				if (desc.getTag().toString().equals("2")) {
 					desc.setTag("0");
 					desc.setVisibility(desc.VISIBLE);
-				}else{
+				} else {
 					desc.setTag("2");
 					desc.setVisibility(desc.GONE);
 				}
-				// ti.setText(desc.getVisibility()+"");
-				// desc.setAnimation();
-
-				
-
-				final long thisId = id;
-				TextView tt = (TextView) findViewById(R.id.today_title);
 				// tt.setText(express + "");
-				ch.setOnClickListener(new OnClickListener() {
+			/*	ch.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
@@ -113,7 +111,7 @@ public class MainActivity extends FragmentActivity implements
 						}
 
 					}
-				});
+				});*/
 
 			}
 
@@ -132,6 +130,15 @@ public class MainActivity extends FragmentActivity implements
 		 * 
 		 * return false; } });
 		 */
+
+	}
+
+	public static void updater(int id, int checked) {
+		if (checked == 1) {
+			db.updateTask(id, null, null, 1, -2, -2, -2, -2);
+		} else {
+			db.updateTask(id, null, null, 0, -2, -2, -2, -2);
+		}
 
 	}
 
@@ -194,14 +201,19 @@ public class MainActivity extends FragmentActivity implements
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM");
 		// db.addTask("1", "", 0, 1, 1, 1, 1394109081264L);
 		TextView today_title = (TextView) findViewById(R.id.today_title);
-		today_title.setText(dayy + " " + dh.getMonth(Calendar.MONTH) + " " + yearr + ", " + dh.getWeek(Calendar.DAY_OF_WEEK));
-		// today_title.setText(c.getTime() + "");
+		today_title.setText(dayy + " " + dh.getMonth(Calendar.MONTH) + " "
+				+ yearr + ", " + dh.getWeek(Calendar.DAY_OF_WEEK));
+		/*
+		 * today_title.setText(Calendar.MONDAY+" " + Calendar.TUESDAY + " "
+		 * +Calendar.WEDNESDAY + " " + Calendar.THURSDAY + " " + Calendar.FRIDAY
+		 * + " " + Calendar.SUNDAY + " " + Calendar.SATURDAY);
+		 */
 
 		// Date time = new Date();
 		// Calendar c2 = Calendar.getInstance();
 		// c2.setTimeInMillis(1394109081264L);
 		// int yr = c2.get(Calendar.YEAR);
-		//today_title.setText(dayy + "." + monthh + "." + yearr + "**" + mo);
+		// today_title.setText(dayy + "." + monthh + "." + yearr + "**" + mo);
 	}
 
 	private void initCalender() {

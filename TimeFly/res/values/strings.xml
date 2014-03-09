@@ -14,7 +14,7 @@
     <string name="todo_edit_description">Description</string>
     <string name="todo_edit_confirm">Confirm</string>
 
-    <color name="listcolor">#99ccff</color>
+    <color name="listcolor">#4692dd</color><!--#99ccff  -->
     <color name="black">#000000</color>
     <color name="white">#fff</color>
     <color name="this_task_color">#fff</color>

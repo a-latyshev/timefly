@@ -20,7 +20,8 @@
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:onClick="onFinishedTask" />
+            android:onClick="onFinishedTask"
+            android:tag="0" />
 
         <TextView
             android:id="@+id/this_task_title"
