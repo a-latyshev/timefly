@@ -21,8 +21,8 @@
     </item>
     
     <item
-        android:id="@+id/show_today_week"
-        android:title="Сегодняшняя неделя">
+        android:id="@+id/exit"
+        android:title="Выход">
     </item>
 
 </menu>

@@ -30,9 +30,34 @@ public class DateHelper {
 		return Months[numberOfMonth];
 	}
 
+	public String getWeek(String EnDay) {
+		int numberOfWeek = 0;
+		if (EnDay.equals("Mon")) {
+			numberOfWeek = 1;
+		}
+		if (EnDay.equals("Tue")) {
+			numberOfWeek = 2;
+		}
+		if (EnDay.equals("Wed")) {
+			numberOfWeek = 3;
+		}
+		if (EnDay.equals("Thu")) {
+			numberOfWeek = 4;
+		}
+		if (EnDay.equals("Fri")) {
+			numberOfWeek = 5;
+		}
+		if (EnDay.equals("Sat")) {
+			numberOfWeek = 0;
+		}
+		if (EnDay.equals("Sun")) {
+			numberOfWeek = 6;
+		}
+		return Weeks[numberOfWeek];
+	}
+
 	public long getLongTime(String date1, String date2) {
 		if (!(date1.equals("")) || !(date2.equals(""))) {
-
 			Date dateInMillSec = null;
 			int typeFormat = 0;
 			if (!(date1.equals("")) && (date2.equals(""))) {
@@ -56,20 +81,19 @@ public class DateHelper {
 		}
 	}
 
-	public String getStringDate(long time){
-		if(time == 0){
+	public String getStringDate(long time) {
+		if (time == 0) {
 			return "Дата выполнения";
-		}else{
+		} else {
 			return dateFormat.format(time);
-		}				
-	}	
-
-	public String getStringTime(long time){
-		if((time == 0) || (timeFormat.format(time).toString().equals("00-00"))){
-			return "Время выполнения";
-		}else{
-			return timeFormat.format(time);
-		}				
+		}
 	}
-	
+
+	public String getStringTime(long time) {
+		if ((time == 0) || (timeFormat.format(time).toString().equals("00-00"))) {
+			return "Время выполнения";
+		} else {
+			return timeFormat.format(time);
+		}
+	}
 }

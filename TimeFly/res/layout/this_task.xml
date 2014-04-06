@@ -10,32 +10,90 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="5"
         android:gravity="center"
         android:orientation="horizontal" >
 
-        <CheckBox
-            android:id="@+id/this_task_finished"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:onClick="onFinishedTask"
-            android:tag="0" />
-
-        <TextView
-            android:id="@+id/this_task_title"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="@+id/TextView01"
-            android:textSize="20sp" />
+            android:layout_weight="2"
+            android:orientation="horizontal" >
+
+            <CheckBox
+                android:id="@+id/this_task_finished"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:onClick="onFinishedTask"
+                android:tag="0" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/this_task_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="@+id/TextView01"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/this_task_date"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="right"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/this_task_important"
+                android:layout_width="35dip"
+                android:layout_height="35dip"
+                android:layout_marginRight="3dip"
+                android:layout_marginTop="3dip"
+                android:clickable="true"
+                android:src="@drawable/imp0"
+                android:tag="not checked" />
+
+            <ImageView
+                android:id="@+id/this_task_express"
+                android:layout_width="35dip"
+                android:layout_height="35dip"
+                android:layout_marginRight="3dip"
+                android:layout_marginTop="3dip"
+                android:src="@drawable/exp0"
+                android:tag="not checked" />
+
+            <ImageView
+                android:id="@+id/this_task_routine"
+                android:layout_width="35dip"
+                android:layout_height="35dip"
+                android:layout_marginRight="3dip"
+                android:layout_marginTop="3dip"
+                android:src="@drawable/rout0"
+                android:tag="not checked" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/this_task_description"

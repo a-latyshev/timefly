@@ -137,7 +137,7 @@ public class EditActivity extends FragmentActivity {
 		if (id == DIALOG_DATE) {
 			DatePickerDialog dpd = new DatePickerDialog(this,
 					callBackDatePicker, c.get(Calendar.YEAR),
-					c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH));
+					c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
 			return dpd;
 
 		}
@@ -195,13 +195,7 @@ public class EditActivity extends FragmentActivity {
 			routine = 1;
 		}
 		long duedate = 0;
-		duedate = dh.getLongTime(edDuedate1, edDuedate2);
-		/*
-		 * if (!(edDuedate1.equals("")) && !(edDuedate2.equals(""))) { duedate =
-		 * dh.getLongTime(edDuedate1 + edDuedate2, 0); } else if
-		 * (!(edDuedate1.equals("")) && (edDuedate2.equals(""))) { duedate =
-		 * dh.getLongTime(edDuedate1, 1); }
-		 */
+		duedate = dh.getLongTime(edDuedate1, edDuedate2);	
 		db.addTask(title, description, finished, important, express, routine,
 				duedate);
 	}

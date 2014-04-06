@@ -2,6 +2,7 @@ package timefly.activity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import timefly.adapters.DateHelper;
 import timefly.adapters.MySimpleAdapter;
@@ -12,14 +13,11 @@ import com.example.timefly.R;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
-import android.text.Spanned;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
@@ -34,8 +32,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,39 +49,22 @@ public class MainActivity extends FragmentActivity implements
 	private static final int CONTEXT_DELETE_TASK = 1;
 	private static final int CONTEXT_EDIT_TASK = 2;
 
+	public static Cursor dataCursor;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.task_list);
 		db = new DB(this);
 		db.open();
-		fillData();
-		todayDate();
-		getSupportLoaderManager().initLoader(0, null, this);
 
+		getSupportLoaderManager().initLoader(0, null, this);
+		showInbox();
 		tasksList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Cursor thisTask = db.getThisTask(id);
-				final CheckBox ch = (CheckBox) view
-						.findViewById(R.id.this_task_finished);
-				/*
-				 * final String title = ((TextView) view
-				 * .findViewById(R.id.this_task_title)).getText() .toString();
-				 * 
-				 * final String desc = ((TextView) view
-				 * .findViewById(R.id.this_task_description)).getText()
-				 * .toString();
-				 */
-				/*
-				 * TextView ttt = (TextView)
-				 * view.findViewById(R.id.this_task_title); //Spanned spanText =
-				 * android.text.Html.fromHtml(tt.getText().toString());
-				 * //tt.setText(spanText);
-				 * ttt.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-				 */
 				TextView desc = (TextView) view
 						.findViewById(R.id.this_task_description);
 				if (desc.getTag().toString().equals("2")) {
@@ -95,62 +74,59 @@ public class MainActivity extends FragmentActivity implements
 					desc.setTag("2");
 					desc.setVisibility(desc.GONE);
 				}
-				// tt.setText(express + "");
-			/*	ch.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						if (ch.isChecked()) {
-							db.updateTask(thisId, null, null, 1, -2, -2, -2,
-									null);
-						} else {
-							db.updateTask(thisId, null, null, 0, -2, -2, -2,
-									null);
-							// fillData();
-							// bt.setText("true");
-						}
-
-					}
-				});*/
 
 			}
 
 		});
-
-		/*
-		 * tasksList.setOnItemLongClickListener(new OnItemLongClickListener() {
-		 * Intent i = new Intent(null, null);
-		 * 
-		 * @Override public boolean onItemLongClick(AdapterView<?> parent, View
-		 * view, int position, long id) {
-		 * 
-		 * 
-		 * startActivityForResult(i, ACTIVITY_CREATE);
-		 * getSupportLoaderManager().getLoader(0).forceLoad();
-		 * 
-		 * return false; } });
-		 */
-
 	}
 
-	public static void updater(int id, int checked) {
-		if (checked == 1) {
-			db.updateTask(id, null, null, 1, -2, -2, -2, -2);
-		} else {
-			db.updateTask(id, null, null, 0, -2, -2, -2, -2);
+	public static void updater(int id, int checked, int type) {
+
+		if (type == 0) {
+			if (checked == 1) {
+				db.updateTask(id, null, null, 1, -2, -2, -2, -2);
+			} else {
+				db.updateTask(id, null, null, 0, -2, -2, -2, -2);
+			}
+		}
+
+		if (type == 1) {
+			if (checked == 1) {
+				db.updateTask(id, null, null, -2, 1, -2, -2, -2);
+			} else {
+				db.updateTask(id, null, null, -2, 0, -2, -2, -2);
+			}
+		}
+
+		if (type == 2) {
+			if (checked == 1) {
+				db.updateTask(id, null, null, -2, -2, 1, -2, -2);
+			} else {
+				db.updateTask(id, null, null, -2, -2, 0, -2, -2);
+			}
+		}
+
+		if (type == 3) {
+			if (checked == 1) {
+				db.updateTask(id, null, null, -2, -2, -2, 1, -2);
+			} else {
+				db.updateTask(id, null, null, -2, -2, -2, 0, -2);
+			}
 		}
 
 	}
 
 	public void fillData() {
-		Cursor cursor = db.getAllData();
+		TextView title = (TextView) findViewById(R.id.nothing_to_do);
+		title.setVisibility(title.GONE);
+		dataCursor = db.getAllData();
 		// формируем столбцы сопоставления
 		String[] from = new String[] { DB.COLUMN_TITLE, DB.COLUMN_DESCRIPTION };
 		int[] to = new int[] { R.id.this_task_title, R.id.this_task_description };
 
 		// создааем адаптер и настраиваем список
-		scAdapter = new MySimpleAdapter(this, R.layout.this_task, cursor, from,
-				to, 0);
+		scAdapter = new MySimpleAdapter(this, R.layout.this_task, dataCursor,
+				from, to, 0);
 		tasksList = (ListView) findViewById(R.id.task_list);
 		tasksList.setAdapter(scAdapter);
 
@@ -158,6 +134,26 @@ public class MainActivity extends FragmentActivity implements
 		registerForContextMenu(tasksList);
 
 		// создаем лоадер для чтения данных
+	}
+
+	public void fillDataByDateTasks(long date) {
+		TextView title = (TextView) findViewById(R.id.nothing_to_do);
+		dataCursor = db.getTasksFromDate(date);
+		title.setVisibility(title.GONE);
+		if (dataCursor.getCount() < 1) {
+			title.setVisibility(title.VISIBLE);
+		}
+		String[] from = new String[] { DB.COLUMN_TITLE, DB.COLUMN_DESCRIPTION };
+		int[] to = new int[] { R.id.this_task_title, R.id.this_task_description };
+
+		// создааем адаптер и настраиваем список
+		scAdapter = new MySimpleAdapter(this, R.layout.this_task, dataCursor,
+				from, to, 0);
+		tasksList = (ListView) findViewById(R.id.task_list);
+		tasksList.setAdapter(scAdapter);
+
+		// добавляем контекстное меню к списку
+		registerForContextMenu(tasksList);
 
 	}
 
@@ -176,15 +172,27 @@ public class MainActivity extends FragmentActivity implements
 		case R.id.show_today:
 			todayDate();
 			return true;
+
+		case R.id.show_inbox:
+			showInbox();
+			return true;
+
+		case R.id.exit:
+			finish();
 		}
 		return super.onMenuItemSelected(featureId, item);
+	}
+
+	public void showInbox() {
+		TextView title = (TextView) findViewById(R.id.today_title);
+		title.setText("Входящие");
+		fillData();
 	}
 
 	private void createTask() {
 		// добавляем запись
 		// db.addTask("ЗАДАЧА", "ОПИСАНИЕ", 0);
 		// получаем новый курсор с данными
-
 		Intent i = new Intent(this, EditActivity.class);
 		startActivityForResult(i, ACTIVITY_CREATE);
 		getSupportLoaderManager().getLoader(0).forceLoad();
@@ -192,28 +200,23 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	private void todayDate() {
+		fillData();
 		Calendar c = Calendar.getInstance();
 		DateHelper dh = new DateHelper();
-		// Date time = (Date) c.getTime();
 		int yearr = c.get(Calendar.YEAR);
 		int monthh = c.get(Calendar.MONTH) + 1;
 		int dayy = c.get(Calendar.DAY_OF_MONTH);
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM");
-		// db.addTask("1", "", 0, 1, 1, 1, 1394109081264L);
-		TextView today_title = (TextView) findViewById(R.id.today_title);
-		today_title.setText(dayy + " " + dh.getMonth(Calendar.MONTH) + " "
-				+ yearr + ", " + dh.getWeek(Calendar.DAY_OF_WEEK));
-		/*
-		 * today_title.setText(Calendar.MONDAY+" " + Calendar.TUESDAY + " "
-		 * +Calendar.WEDNESDAY + " " + Calendar.THURSDAY + " " + Calendar.FRIDAY
-		 * + " " + Calendar.SUNDAY + " " + Calendar.SATURDAY);
-		 */
 
-		// Date time = new Date();
-		// Calendar c2 = Calendar.getInstance();
-		// c2.setTimeInMillis(1394109081264L);
-		// int yr = c2.get(Calendar.YEAR);
-		// today_title.setText(dayy + "." + monthh + "." + yearr + "**" + mo);
+		TextView today_title = (TextView) findViewById(R.id.today_title);
+
+		today_title.setText("Сегодня " + dayy + " " + dh.getMonth(monthh - 1)
+				+ " " + yearr + ", " + dh.getWeek(c.get(Calendar.DAY_OF_WEEK)));
+
+		long date = dh.getLongTime(dayy + "-" + monthh + "-" + yearr, "");
+
+		fillDataByDateTasks(date);
+
 	}
 
 	private void initCalender() {
@@ -227,13 +230,30 @@ public class MainActivity extends FragmentActivity implements
 			Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 		if (requestCode == ACTIVITY_CALENDER && resultCode == RESULT_OK) {
-			TextView today_title = (TextView) findViewById(R.id.today_title);
-			int thisDay = intent.getIntExtra("DAY", 0);
-			int thisMonth = intent.getIntExtra("MONTH", 0);
-			int thisYear = intent.getIntExtra("YEAR", 0);
-			today_title.setText(thisDay + "." + thisMonth + "." + thisYear);
+			String ChoseDate = intent.getStringExtra("ChoseDate");
+			showThisChoseDateTasks(ChoseDate);
+		} else {
+			// ###############ВОЗМОЖНО ОШИБКА№№№№№№№№№№№№№№№№№№№№№№№№№№№№
+			showInbox();
 		}
-		fillData();
+
+	}
+
+	public void showThisChoseDateTasks(String choseDate) {
+		DateHelper dh = new DateHelper();
+		TextView today_title = (TextView) findViewById(R.id.today_title);
+		SimpleDateFormat month = new SimpleDateFormat("MM");
+		SimpleDateFormat day = new SimpleDateFormat("d");
+		SimpleDateFormat year = new SimpleDateFormat("yyyy");
+		SimpleDateFormat dayOfWeak = new SimpleDateFormat("EE");
+		Date thisDate = new Date(dh.getLongTime(choseDate, ""));
+		String title = day.format(thisDate) + " "
+				+ dh.getMonth(Integer.parseInt(month.format(thisDate)) - 1)
+				+ " " + year.format(thisDate) + ", "
+				+ dh.getWeek(dayOfWeak.format(thisDate));
+		today_title.setText(title);
+
+		fillDataByDateTasks(dh.getLongTime(choseDate, ""));
 	}
 
 	@Override
@@ -303,8 +323,7 @@ public class MainActivity extends FragmentActivity implements
 
 		@Override
 		public Cursor loadInBackground() {
-			Cursor cursor = db.getAllData();
-			return cursor;
+			return dataCursor;
 		}
 
 	}

@@ -1,5 +1,6 @@
 package timefly.database;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -18,7 +19,7 @@ public class DB {
 	public static final String COLUMN_IMPORTANT = "important";
 	public static final String COLUMN_EXPRESS = "express";
 	public static final String COLUMN_ROUTINE = "routine";
-	public static final String COLUMN_DUEDATE= "duedate";
+	public static final String COLUMN_DUEDATE = "duedate";
 
 	private static final String DATABASE_NAME = "TimeFly.db";
 	private static final int DATABASE_VERSION = 1;
@@ -26,10 +27,8 @@ public class DB {
 			+ " (" + COLUMN_ID + " integer primary key autoincrement, "
 			+ COLUMN_TITLE + " text, " + COLUMN_FINISHED + " integer, "
 			+ COLUMN_IMPORTANT + " integer, " + COLUMN_EXPRESS + " integer, "
-			+ COLUMN_ROUTINE + " integer, " 
-			+ COLUMN_DUEDATE + " long, " 
-			+ COLUMN_DESCRIPTION + " text "
-			+ ");";
+			+ COLUMN_ROUTINE + " integer, " + COLUMN_DUEDATE + " long, "
+			+ COLUMN_DESCRIPTION + " text " + ");";
 
 	private final Context mCtx;
 
@@ -51,23 +50,29 @@ public class DB {
 	}
 
 	public Cursor getAllData() {
-		return db.query(TABLE_NAME, null, null, null, null, null, null);
+		return db.query(TABLE_NAME, null, null, null, null,
+				null, null);
+	}
+
+	public Cursor getTasksFromDate(long date) {
+		long date2 = date + 86400000;
+		return db.query(TABLE_NAME, null, COLUMN_DUEDATE + ">=" + date + " AND " + COLUMN_DUEDATE + "<" + date2, null,
+				null, null, null);
 	}
 
 	public Cursor getThisTask(long rowId) throws SQLException {
-		String[] columns = new String[] { COLUMN_DESCRIPTION, COLUMN_FINISHED,
-				COLUMN_TITLE, COLUMN_EXPRESS, COLUMN_IMPORTANT, COLUMN_ROUTINE, COLUMN_DUEDATE };
-		Cursor mCursor = db.query(true, TABLE_NAME, columns, COLUMN_ID + "="
-				+ rowId, null, null, null, null, null);
-		if (mCursor != null) {
-			mCursor.moveToFirst();
-		}
+		String[] columns = new String[] { COLUMN_ID, COLUMN_DESCRIPTION,
+				COLUMN_FINISHED, COLUMN_TITLE, COLUMN_EXPRESS,
+				COLUMN_IMPORTANT, COLUMN_ROUTINE, COLUMN_DUEDATE };
+		Cursor mCursor = db.query(TABLE_NAME, null, COLUMN_ID + "=" + rowId,
+				null, null, null, null, null);
+
 		return mCursor;
 	}
-	
-	public Cursor getTasksBetweenDate(){
+
+	public Cursor getTasksBetweenDate() {
 		return null;
-		
+
 	}
 
 	// добавить запись в DB_TABLE
@@ -85,7 +90,8 @@ public class DB {
 	}
 
 	public boolean updateTask(long rowId, String title, String description,
-			long finished, long important, long express, long routine, long duedate) {
+			long finished, long important, long express, long routine,
+			long duedate) {
 		ContentValues cv = new ContentValues();
 		if (title != null) {
 			cv.put(COLUMN_TITLE, title);

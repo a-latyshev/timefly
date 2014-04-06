@@ -9,20 +9,32 @@
         android:id="@+android:id/today_title"
         android:layout_width="fill_parent"
         android:layout_height="40dip"
-        android:text="today date"
-        android:background="@color/white" 
+        android:background="@color/white"
         android:gravity="center"
-        android:textSize="18sp"/>
+        android:text="today date"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/nothing_to_do"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="Ничего не запланировано!"
+        android:textSize="18sp"
+        android:visibility="gone" />
 
     <ListView
         android:id="@+android:id/task_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="20dp"
-        android:dividerHeight="8sp"
-        android:divider = "@color/listcolor">"
+        android:divider="@color/listcolor"
+        android:dividerHeight="8sp" >
     </ListView>
 
 </LinearLayout>

@@ -23,8 +23,8 @@
     <color name="yellow">#FFD700</color>
     <color name="darkblue">#000080</color>
 
-    <string name="title_activity_todo_details">TodoDetails</string>
-    <string name="title_activity_edit">EditActivity</string>
-    <string name="title_activity_calender">CalenderActivity</string>
+
+    <string name="title_activity_edit">Создать задачу</string>
+    <string name="title_activity_calender">Календарь</string>
 
 </resources>

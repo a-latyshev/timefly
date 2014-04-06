@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,10 +6,19 @@
 
     <CalendarView
         android:id="@+id/calendar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:showWeekNumber="true" 
-        android:isScrollContainer="false" />
-    	    
+        android:layout_width="275dip"
+        android:layout_height="275dip"
+        android:layout_gravity="center"
+        android:scrollbars="vertical"
+        android:showWeekNumber="true" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="25sp"
+        android:clickable="true"
+        android:text="Дата выбрана" />
 
 </LinearLayout>
